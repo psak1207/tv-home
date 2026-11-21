@@ -6,5 +6,6 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 LIST="${1:?usage: tools/disable.sh <debloat list>}"
 PY="${PY:-tools/venv/bin/python}"
+ls backup/*/state.json >/dev/null 2>&1 || { echo "Back up first: $PY -I tools/tvstate.py backup"; exit 1; }
 grep -vE '^\s*(#|$)' "$LIST" | awk '{print "pm disable-user --user 0 " $1}' \
   | "$PY" -I tools/tv.py --batch
